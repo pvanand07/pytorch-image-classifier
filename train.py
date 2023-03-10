@@ -19,3 +19,14 @@ from get_function import parse_arguments_train
 # Get input arguments
 arg = parse_arguments_train()
 print(arg)
+
+  # Checking gpu availability and assigning device
+if arg.gpu and torch.cuda.is_available():
+    device = "cuda"
+    print("Using gpu for computing")
+elif arg.gpu and not (torch.cuda.is_available()):
+    device = "cpu"
+    print("gpu unavailable, Using cpu for computing")
+else:
+    device = "cpu"
+    print("Using cpu for computing")
