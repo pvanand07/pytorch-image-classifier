@@ -54,3 +54,53 @@ def parse_arguments_train():
 
     # return parsed arguments
     return args
+    
+##-------------------------------------------------------------------------------------------------#
+## 1.2 DATA LOADER                                                                                 #
+##-------------------------------------------------------------------------------------------------#
+
+def get_data_loaders(path):
+    '''
+    This function takes the file paths for the dataset,
+    loads the data, applies transforms, and returns data loaders for each data set.
+    
+    Inputs:
+    - path: file path to the data directory
+
+    Returns:
+    - trainloader: PyTorch data loader for the training data set
+    - validloader: PyTorch data loader for the validation data set
+    - testloader: PyTorch data loader for the testing data set
+    - train_dataset.class_to_idx: Dictionary maping flower class to dataloader index 
+    '''
+    data_dir = path
+    train_dir = data_dir + '/train'
+    valid_dir = data_dir + '/valid'
+    test_dir = data_dir + '/test'
+    # Define transforms for the training, validation, and testing sets
+    train_transforms = transforms.Compose([
+        transforms.RandomRotation(30), # Randomly rotate images by up to 30 degrees
+        transforms.RandomResizedCrop(224), # Randomly crop images to 224x224 pixels
+        transforms.RandomHorizontalFlip(), # Randomly flip images horizontally
+        transforms.ToTensor(), # Convert the image to a PyTorch tensor
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # Normalize the image using the specified means and standard deviations
+    ])
+
+    valid_transforms = test_transforms = transforms.Compose([
+        transforms.Resize(255), # Resize the image to 255 pixels on the shorter side
+        transforms.CenterCrop(224), # Crop the center 224x224 pixels of the image
+        transforms.ToTensor(), # Convert the image to a PyTorch tensor
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # Normalize the image using the specified means and standard deviations
+    ])
+
+    # Load the datasets with ImageFolder
+    train_dataset = datasets.ImageFolder(train_dir, transform=train_transforms) # Load the training dataset with the training transforms
+    valid_dataset = datasets.ImageFolder(valid_dir, transform=valid_transforms) # Load the validation dataset with the validation transforms
+    test_dataset = datasets.ImageFolder(test_dir, transform=test_transforms) # Load the testing dataset with the testing transforms
+
+    # Define the dataloaders using the image datasets and the transforms
+    trainloader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True) # Load the training dataset into batches of size 64, shuffle the data at each epoch
+    validloader = torch.utils.data.DataLoader(valid_dataset, batch_size=64) # Load the validation dataset into batches of size 64
+    testloader = torch.utils.data.DataLoader(test_dataset, batch_size=64) # Load the testing dataset into batches of size 64
+
+    return trainloader, validloader, testloader,train_dataset.class_to_idx
