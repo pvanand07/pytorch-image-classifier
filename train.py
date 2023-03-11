@@ -30,3 +30,6 @@ elif arg.gpu and not (torch.cuda.is_available()):
 else:
     device = "cpu"
     print("Using cpu for computing")
+
+# Presprocessing image data for training, validation and testing
+trainloader, validloader, testloader, class_to_idx = get_data_loaders(arg.data_dir)
