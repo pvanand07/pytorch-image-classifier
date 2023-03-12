@@ -20,3 +20,25 @@ from tqdm import tqdm
 from PIL import Image
 import json
 import os
+
+##-------------------------------------------------------------------------------------------------#
+# 1. FUNCTIONS FOR test.py                                                                         #
+##-------------------------------------------------------------------------------------------------#
+##   1.1 IMPORT PRETRAINED MODEL                                                                   #
+##-------------------------------------------------------------------------------------------------#
+
+def import_model(model_name):
+    """
+    Imports a pretrained PyTorch model with the specified architecture.
+
+    Args:
+        model_name (str): Name of the model architecture to import.
+
+    Returns:
+        PyTorch model: The pretrained model with its weights frozen.
+    """
+    model = models.__dict__[model_name](pretrained=True);
+    for param in model.parameters():
+        param.requires_grad = False
+    return model
+
