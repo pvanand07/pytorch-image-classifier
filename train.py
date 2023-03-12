@@ -33,3 +33,6 @@ else:
 
 # Presprocessing image data for training, validation and testing
 trainloader, validloader, testloader, class_to_idx = get_data_loaders(arg.data_dir)
+
+# Obtaining model, criterion and optimizer
+model, criterion, optimizer = Load_model(arg.arch, arg.hidden_units, arg.learning_rate)
