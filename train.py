@@ -36,3 +36,6 @@ trainloader, validloader, testloader, class_to_idx = get_data_loaders(arg.data_d
 
 # Obtaining model, criterion and optimizer
 model, criterion, optimizer = Load_model(arg.arch, arg.hidden_units, arg.learning_rate)
+
+# Training model
+model = train_model(trainloader, validloader, model, criterion, optimizer, device, arg.epochs)
