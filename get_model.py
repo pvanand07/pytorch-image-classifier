@@ -95,3 +95,87 @@ def Load_model(model_name,hidden_units, learning_rate):
   # Set the loss function for training the model
   criterion = nn.NLLLoss() # use negative log likelihood loss as the criterion
   return model, criterion, optimizer
+
+##-------------------------------------------------------------------------------------------------#
+##   1.3 TRAIN MODEL                                                                               #
+##-------------------------------------------------------------------------------------------------#
+
+def train_model(trainloader, validloader, model, criterion, optimizer, device, epochs):
+    """
+    Trains a PyTorch model on a given dataset using the specified hyperparameters.
+
+    Args:
+        trainloader (torch.utils.data.DataLoader): PyTorch DataLoader for the training set
+        validloader (torch.utils.data.DataLoader): PyTorch DataLoader for the validation set
+        model (torch.nn.Module): PyTorch model to be trained
+        criterion (torch.nn.modules.loss._Loss): loss function used for training the model
+        optimizer (torch.optim.Optimizer): optimization algorithm used for updating the model's parameters
+        device (str): the device (CPU or GPU) on which the model should be trained
+        epochs (int): the number of epochs for which to train the model
+
+    Returns:
+        model (torch.nn.Module): trained PyTorch model 
+    """
+    # Move the model to the preferred device
+    model.to(device)
+
+    # Initialize variables
+    steps = 0
+    running_loss = 0
+    print_every = 5
+    train_losses, test_losses = [], []
+
+    # Loop over each epoch, using tqdm to print out progress during each iteration
+    for epoch in tqdm(range(epochs)):
+      
+        # Loop over the training dataset in batches
+        for inputs, labels in tqdm(trainloader):
+            steps += 1
+
+            # Move input and label tensors to the default device
+            inputs, labels = inputs.to(device), labels.to(device)
+
+            # Forward pass, compute loss, backpropagate, and update parameters
+            logps = model.forward(inputs)
+            loss = criterion(logps, labels)
+
+            optimizer.zero_grad() # Set the gradients to zero to clear the gradients from previous step 
+            loss.backward()
+            optimizer.step()
+
+            # Update running loss
+            running_loss += loss.item()
+
+            # Every print_every steps, calculate validation loss and accuracy and print metrics
+            if steps % print_every == 0:
+                test_loss = 0
+                accuracy = 0
+                model.eval()
+                with torch.no_grad():
+                    for inputs, labels in validloader: # Iterate through each batch of inputs and labels
+                        inputs, labels = inputs.to(device), labels.to(device) # Push inputs and labels to available device
+                        logps = model.forward(inputs) # calculating log-probabilities using model.forward()
+                        batch_loss = criterion(logps, labels) # Calculating batch loss using criterion
+
+                        test_loss += batch_loss.item() # Add each batch loss to obtain total test loss 
+
+                        # Calculate accuracy
+                        ps = torch.exp(logps) # converting log probabilties to probabilites 
+                        top_p, top_class = ps.topk(1, dim=1) # Obtaining top class and probabilities
+                        equals = top_class == labels.view(*top_class.shape) # Comparing obtained top classes and their labels
+                        accuracy += torch.mean(equals.type(torch.FloatTensor)).item() # Calculating accuracy by taking the mean of equals tensor
+
+                # Print metrics
+                print(f"Epoch {round(steps/len(trainloader),2)}/{epochs}.. "
+                      f"Train loss: {running_loss/print_every:.3f}.. "
+                      f"Test loss: {test_loss/len(validloader):.3f}.. "
+                      f"Test accuracy: {accuracy/len(validloader):.3f}")
+
+                # At completion of epoch, append training and validation losses to lists and reset running loss
+                train_losses.append(running_loss)
+                test_losses.append(test_loss)
+                running_loss = 0
+                model.train()
+
+    # Return the lists of training and validation losses
+    return model
