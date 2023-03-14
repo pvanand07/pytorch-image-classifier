@@ -39,3 +39,6 @@ model, criterion, optimizer = Load_model(arg.arch, arg.hidden_units, arg.learnin
 
 # Training model
 model = train_model(trainloader, validloader, model, criterion, optimizer, device, arg.epochs)
+# Creating save directory if it doesn't exists
+if (arg.save_dir is not None) and (not os.path.exists(arg.save_dir)):
+    os.mkdir(arg.save_dir)
