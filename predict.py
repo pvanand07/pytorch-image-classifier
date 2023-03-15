@@ -21,3 +21,7 @@ import warnings
 
 # Hide all warnings
 warnings.filterwarnings("ignore")
+
+# Get input arguments
+arg = parse_arguments_predict()
+print(arg)
