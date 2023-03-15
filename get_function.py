@@ -104,3 +104,30 @@ def get_data_loaders(path):
     testloader = torch.utils.data.DataLoader(test_dataset, batch_size=64) # Load the testing dataset into batches of size 64
 
     return trainloader, validloader, testloader,train_dataset.class_to_idx
+
+##-------------------------------------------------------------------------------------------------#
+## 2.1 - PARSE ARGUMENTS FOR PREDICTION                                                            #
+##-------------------------------------------------------------------------------------------------#
+def parse_arguments_predict():
+    """
+    Parse command-line arguments using argparse.
+
+    Returns:
+        args: Parsed arguments
+    """
+    # create argument parser object
+    parser = argparse.ArgumentParser(description='Predict the class of an image using a trained neural network')
+    
+    # add arguments to parser object
+    parser.add_argument('input_path', help='the path to the image file')
+    parser.add_argument('checkpoint', help='the path to the checkpoint file')
+    parser.add_argument('--top_k', type=int, default=5, help='return the top K most likely classes')
+    parser.add_argument('--category_names', metavar='cat_to_name.json', help='the file containing the category names')
+    parser.add_argument('--gpu', action='store_true', help='use GPU for inference')
+
+    # parse arguments
+    args = parser.parse_args()
+
+    # return parsed arguments
+    return args
+    
