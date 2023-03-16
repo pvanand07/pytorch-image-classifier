@@ -36,3 +36,8 @@ elif arg.gpu and not (torch.cuda.is_available()):
 else:
     device = "cpu"
     print("Using cpu for computing")
+
+# Load model from checkpoint
+model, class_to_idx = load_checkpoint(arg.checkpoint, arch="resnet18", 
+                                    hidden_units=5120, learning_rate=0.0003
+                                     )
