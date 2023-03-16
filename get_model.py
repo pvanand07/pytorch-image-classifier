@@ -179,3 +179,35 @@ def train_model(trainloader, validloader, model, criterion, optimizer, device, e
 
     # Return the lists of training and validation losses
     return model
+
+##-------------------------------------------------------------------------------------------------#
+# 2. FUNCTIONS FOR predict.py                                                                      #
+##-------------------------------------------------------------------------------------------------#
+##   2.1 LOAD CHECKPOINT AND REBUILD MODEL                                                         #
+##-------------------------------------------------------------------------------------------------#
+def load_checkpoint(file_path,arch,hidden_units, learning_rate):
+    """
+    Load a pretrained model checkpoint and rebuild the model using the saved state dictionary.
+    
+    Args:
+    file_path (str): Path to the saved checkpoint file.
+    
+    Returns:
+    model (torch.nn.Module): The reconstructed model.
+    """
+    
+    # Load the pretrained model
+    model,_,_ = Load_model(arch,hidden_units, learning_rate); 
+    # Check if GPU is available
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+
+    # Load the state dict with torch.load
+    checkpoint = torch.load(file_path, map_location=torch.device(device));
+    state_dict = checkpoint['state_dict']
+    class_to_idx = checkpoint['class_to_idx']
+    
+    # Load the state dict into the model
+    model.load_state_dict(state_dict);
+    
+    return model,class_to_idx
