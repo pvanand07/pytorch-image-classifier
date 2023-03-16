@@ -25,3 +25,14 @@ warnings.filterwarnings("ignore")
 # Get input arguments
 arg = parse_arguments_predict()
 print(arg)
+
+# Determine device to be used for computation
+if arg.gpu and torch.cuda.is_available():
+    device = "cuda"
+    print("Using gpu for computing")
+elif arg.gpu and not (torch.cuda.is_available()):
+    device = "cpu"
+    print("gpu unavailable, Using cpu for computing")
+else:
+    device = "cpu"
+    print("Using cpu for computing")
