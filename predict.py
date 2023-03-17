@@ -41,3 +41,6 @@ else:
 model, class_to_idx = load_checkpoint(arg.checkpoint, arch="resnet18", 
                                     hidden_units=5120, learning_rate=0.0003
                                      )
+
+# Preprocess image
+img_t = process_image(arg.input_path)
