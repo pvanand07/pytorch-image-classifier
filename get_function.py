@@ -130,4 +130,35 @@ def parse_arguments_predict():
 
     # return parsed arguments
     return args
-    
+
+##-------------------------------------------------------------------------------------------------#
+## 2.2 PROCESS IMAGE FOR PREDICTON                                                                 #
+##-------------------------------------------------------------------------------------------------#
+
+def process_image(input_path):
+    '''
+    Process an image for use in a PyTorch model.
+
+    Args:
+    - input_path (str): The file path to the input image.
+
+    Returns:
+    - img_t (torch.Tensor): The processed image tensor.
+    '''
+
+    # Load image using PIL image library 
+    img = Image.open(input_path)
+    # Define image transformations
+    transform = transforms.Compose([
+        transforms.Resize(255),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
+    ])
+    # Apply transformations
+    img_t = transform(img)
+
+    return img_t  
