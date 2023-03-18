@@ -24,13 +24,13 @@ To train a new network, run the train.py script in the command line with the fol
 ```
 python train.py data_directory --arch "resnet18" --learning_rate 0.0003 --hidden_units 5120 --epochs 10 --gpu
 ```
-- 'data_dir', help='the directory where the data is stored'
-- '--save_dir', help='the directory where checkpoints will be saved'
-- '--arch', default='resnet18', choices=['efficientnet_v2_l','densenet121'], help='the architecture to use for the network'
-- '--learning_rate', type=float, default=0.0003, help='the learning rate to use for the optimizer'
-- '--hidden_units', type=int, default=5120, help='the number of units in the hidden layer'
-- '--epochs', type=int, default=10, help='the number of epochs to train for'
-- '--gpu', help='use GPU for training'
+- data_directory  - the directory where the data is stored
+- --save_dir      - type=str, the directory where checkpoints will be saved
+- --arch          - default='resnet18', choices=['efficientnet_v2_l','densenet121'], help='the architecture to use for the network'
+- --learning_rate - type=float, default=0.0003, help='the learning rate to use for the optimizer'
+- --hidden_units  - type=int, default=5120, help='the number of units in the hidden layer'
+- --epochs        - type=int, default=10, help='the number of epochs to train for'
+- '--gpu'         - toggle to use GPU for training'
 
 ### Prediction
 
