@@ -50,9 +50,10 @@ python predict.py "/path/to/image" checkpoint --category_names cat_to_name.json 
 ### This project requires the following dependencies:
 
 - Python 3.x
-- PyTorch
-- torchvision
-- NumPy
+- torch==1.13.1
+- torchvision==0.14.1
+- numpy
+- pandas
 - Matplotlib
 
 These dependencies can be installed using pip and the requirements.txt file included in this repository:
