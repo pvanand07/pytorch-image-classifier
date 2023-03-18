@@ -24,13 +24,13 @@ To train a new network, run the train.py script in the command line with the fol
 ```
 python train.py data_directory --arch "resnet18" --learning_rate 0.0003 --hidden_units 5120 --epochs 10 --gpu
 ```
-- data_directory  - the directory where the data is stored
-- --save_dir      - type=str, the directory where checkpoints will be saved
-- --arch          - default='resnet18', choices=['efficientnet_v2_l','densenet121'], help='the architecture to use for the network'
-- --learning_rate - type=float, default=0.0003, help='the learning rate to use for the optimizer'
-- --hidden_units  - type=int, default=5120, help='the number of units in the hidden layer'
-- --epochs        - type=int, default=10, help='the number of epochs to train for'
-- '--gpu'         - toggle to use GPU for training'
+- data_directory  :  help= 'the directory where the training data is stored'
+- --save_dir      : type=str, the directory where checkpoints will be saved
+- --arch          : default='resnet18', choices=['efficientnet_v2_l','densenet121'], help='the architecture to use for the network'
+- --learning_rate : type=float, default=0.0003, help='the learning rate to use for the optimizer'
+- --hidden_units  : type=int, default=5120, help='the number of units in the hidden layer'
+- --epochs        : type=int, default=10, help= 'the number of epochs to train for'
+- '--gpu'         : toggle to use GPU for training
 
 ### Prediction
 
@@ -39,11 +39,11 @@ To predict the class of a flower image, run the predict.py script in the command
 ```
 python predict.py "/path/to/image" checkpoint --category_names cat_to_name.json --top_k 5 --gpu
 ```
-- "/path/to/image" is the path to the flower image.
-- checkpoint is the path to the trained model checkpoint.
-- --category_names is the path to the JSON file that maps the class values to other category names (default is "cat_to_name.json").
-- --top_k sets the number of top K classes to display (default is 5).
-- --gpu allows users to choose whether to use the GPU to calculate the predictions.
+- input_path : help= the path to the image file
+- checkpoint : help= the path to the checkpoint file
+- --top_k : type=int, default=5, help= return the top K most likely classes
+- --category_names : help= the file containing the category names
+- --gpu : help = toggle to use GPU for inference
 
 ## Dependencies
 
