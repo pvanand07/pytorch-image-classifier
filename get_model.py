@@ -211,3 +211,46 @@ def load_checkpoint(file_path,arch,hidden_units, learning_rate):
     model.load_state_dict(state_dict);
     
     return model,class_to_idx
+    
+##-------------------------------------------------------------------------------------------------#
+##   2.2 PREDICT IMAGE CLASS                                                                       #
+##-------------------------------------------------------------------------------------------------#
+def predict(img, model, top_k,device):
+    '''
+    Predict the class (or classes) of an image using a trained deep learning model.
+
+    Args:
+    img (torch.Tensor): input image tensor
+    model (torch.nn.Module): trained deep learning model
+    top_k (int): number of top predicted classes to return
+    device (str): device to run the model on (cpu or gpu)
+
+    Returns:
+    top_class (torch.Tensor): tensor of top predicted classes
+    top_p (torch.Tensor): tensor of corresponding probabilities for the top predicted classes
+    '''
+
+    # Add a batch dimension to the tensor
+    img = torch.unsqueeze(img, 0)
+
+    # Move the input tensor and the model to the specified device
+    img = img.to(device)
+    model.to(device)
+
+    # Set the model to evaluation mode
+    model.eval()
+
+    # Perform a forward pass through the model and get the predicted class probabilities
+    with torch.no_grad():
+      log_ps = model(img)
+      ps = torch.exp(log_ps)
+
+    # Get the top-k predicted classes and their corresponding probabilities
+    top_p, top_class = ps.topk(top_k, dim=1)
+  
+    return top_class, top_p
+
+##-------------------------------------------------------------------------------------------------#
+##                                   END OF GET MODEL                                              #
+##-------------------------------------------------------------------------------------------------#
+
