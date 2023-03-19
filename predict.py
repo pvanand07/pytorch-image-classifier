@@ -44,3 +44,6 @@ model, class_to_idx = load_checkpoint(arg.checkpoint, arch="resnet18",
 
 # Preprocess image
 img_t = process_image(arg.input_path)
+
+# Get idx_to_class dictionary
+idx_to_class = {v: k for k, v in class_to_idx.items()}
