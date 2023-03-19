@@ -47,3 +47,6 @@ img_t = process_image(arg.input_path)
 
 # Get idx_to_class dictionary
 idx_to_class = {v: k for k, v in class_to_idx.items()}
+
+# Predict topk classes and their probabilities
+top_class, top_p = predict(img_t, model, arg.top_k, device)
